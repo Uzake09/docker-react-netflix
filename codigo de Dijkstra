@@ -1,0 +1,67 @@
+#algoritimo de drajstica:
+import heapq
+
+n, m= input().split()
+n= int(n)
+m= int(m)
+n_out= [[] * n for i in range(n)]
+custo=[]
+for i in range(n):
+    linha= []
+    for j in range(n):
+        if i == j:
+            linha.append(0)
+        else:
+            linha.append(-1)
+    custo.append(linha)
+
+infinity= 1
+for j in range (m):
+    a,b,c= input().split()
+    a= int(a)
+    b=int(b)
+    c=int(c)
+    n_out[a].append(b)
+    custo[a][b]= c
+    infinity= infinity + c
+
+marca= n*[0]
+L= n*[infinity]
+L[0]=0
+D= [(0,0)]  #(l())
+for w in range(1,n):
+    heapq.heappush(D,(L[w],w))
+pai= n*[-1]
+
+while D !=[]:
+    Lmin, v= heapq.heappop(D)
+    marca[v]=1
+    for w in n_out[v]:
+        if marca[w]== 0:
+            if L[v] + custo[v][w] < L[w]:
+                for i in range (len(D)):
+                    if D[i] == (L[w],w):
+                        pos= i
+                        break
+                L[w] = L[v]+ custo[v][w]
+                D[pos]= (L[w],w)
+                heapq._siftdown(D,0,pos)
+                pai[w]= v
+
+print(L)
+print(pai)
+
+'''
+5 11
+0 1 1
+0 2 3
+0 4 6
+1 2 1
+1 3 3
+2 0 1
+2 1 2
+2 3 1
+3 0 3
+3 4 2
+4 3 1
+'''
